@@ -30,7 +30,7 @@ namespace AniSearch_App.Droid
 
         button.Click += delegate {
             Console.WriteLine("Bllob");
-            asd.webClient("Tokyo", ApiRead.SearchKrit.anime);
+            asd.Search("Tokyo", ApiRead.SearchKit.anime);
         };
 		}
 	}
