@@ -23,20 +23,41 @@ namespace AniSearch_App
             source = WebUtility.HtmlDecode(source);
             HtmlAgilityPack.HtmlDocument resultat = new HtmlAgilityPack.HtmlDocument();
             resultat.LoadHtml(source);
-            StringBuilder st = new StringBuilder();
+            String st = "";
             foreach(HtmlNode ht in resultat.DocumentNode.Descendants())
             {
-                st.Append("-----\r");
-                st.Append("ID:" + ht.Id + "\r");
-                st.Append("Attributes:" + ht.Attributes + "\r");
-                st.Append("Name:" + ht.Name + "\r");
-                st.Append("-----\r");
-                st.Append("\r");
+                st+=("-----\n");
+                st += ("ID:" + ht.Id + "\n");
+                st += ("Attributes:" + ht.Attributes + "\n");
+                st += ("Name:" + ht.Name + "\n");
+                if (ht.ChildNodes.Count > 0)
+                    st += "Childs" + readHtmlNodes(ht, 1);
+                st += ("-----\n");
+                st += ("\n");
             }
             List<HtmlNode> toftitle = resultat.DocumentNode.Descendants().Where
             (x => (x.Name == "tr" && x.Attributes["responsive-table mtC"] != null &&
             x.Attributes["class"].Value.Contains("block_content"))).ToList();
-            return st.ToString();
+            return st;
+        }
+
+        private string readHtmlNodes(HtmlNode html, int tabCount)
+        {
+            string tab = "";
+            string st = "";
+            for ( int i = 0; i < tabCount; i++) tab += "\t";
+            foreach (HtmlNode ht in html.ChildNodes)
+            {
+                st += (tab + "-----\n");
+                st += (tab + "ID:" + ht.Id + "\n");
+                st += (tab + "Attributes:" + ht.Attributes + "\n");
+                st += (tab + "Name:" + ht.Name + "\n");
+                if (ht.ChildNodes.Count > 0)
+                    st += "tab + Childs" + readHtmlNodes(ht, tabCount + 1);
+                st += (tab + "-----\n");
+                st += ("\n");
+            }
+            return st;
         }
     }
 }
